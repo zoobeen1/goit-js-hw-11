@@ -1,5 +1,5 @@
 const PIXA_KEY = '27472864-20a91975f294fe19c608dc0e7';
-const BASE_URL = 'https://pixabay.com/api';
+const BASE_URL = 'https://pixabay.com/api/';
 
 import Axios from 'axios';
 const params = {

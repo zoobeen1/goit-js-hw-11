@@ -11,8 +11,8 @@ const form = document.querySelector('form');
 const searchInput = form.elements.searchQuery;
 const gallery = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
-const PER_PAGE = 40;
-let page = 1;
+// const PER_PAGE = 40;
+// API.params.page = 1;
 let hitCounter = 0;
 let lightbox = new SimpleLightbox('.gallery a');
 
@@ -35,12 +35,10 @@ function clearGallery() {
 function onSubmit(e) {
   e.preventDefault();
   clearGallery();
-  page = 1;
+  API.params.page = 1;
   hitCounter = 0;
   loadMoreBtn.classList.add('invisible');
   API.params.q = searchInput.value;
-  API.params.page = page;
-  API.params.per_page = PER_PAGE;
   const data = API.getPhotos();
   data
     .then(resp => {
@@ -50,16 +48,15 @@ function onSubmit(e) {
         return;
       }
       Notify.success(`Hooray! We found ${resp.totalHits} images.`);
-      hitCounter = PER_PAGE;
+      hitCounter = API.params.per_page;
       renderGallery(resp.hits);
       loadMoreBtn.classList.remove('invisible');
     })
     .catch(onError);
 }
 function onLoadMore() {
-  API.params.q = searchInput.value;
-  API.params.page = page;
-  API.params.per_page = PER_PAGE;
+  API.params.page++;
+  // API.params.q = searchInput.value;
   const data = API.getPhotos();
   data
     .then(resp => {
@@ -68,8 +65,8 @@ function onLoadMore() {
         Notify.info("We're sorry, but you've reached the end of search results.");
         return;
       }
-      page++;
-      hitCounter += PER_PAGE;
+
+      hitCounter += API.params.per_page;
       lightbox.refresh();
       renderGallery(resp.hits);
     })
