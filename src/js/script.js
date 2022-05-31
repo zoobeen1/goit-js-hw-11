@@ -38,7 +38,10 @@ function onSubmit(e) {
   page = 1;
   hitCounter = 0;
   loadMoreBtn.classList.add('invisible');
-  const data = API.getPhotos(searchInput.value, page, PER_PAGE);
+  API.params.q = searchInput.value;
+  API.params.page = page;
+  API.params.per_page = PER_PAGE;
+  const data = API.getPhotos();
   data
     .then(resp => {
       if (resp.length < 1) {
@@ -54,7 +57,10 @@ function onSubmit(e) {
     .catch(onError);
 }
 function onLoadMore() {
-  const data = API.getPhotos(searchInput.value, page + 1, PER_PAGE);
+  API.params.q = searchInput.value;
+  API.params.page = page;
+  API.params.per_page = PER_PAGE;
+  const data = API.getPhotos();
   data
     .then(resp => {
       if (resp.totalHits < hitCounter) {
