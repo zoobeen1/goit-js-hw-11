@@ -5,7 +5,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import API from './axis-crud';
 import photoCardTpl from '../templates/photo-card.hbs';
 import SimpleLightbox from 'simplelightbox';
-// import SimpleLightbox from 'simple-lightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 //vars
 const form = document.querySelector('form');
@@ -20,7 +19,6 @@ let lightbox = new SimpleLightbox('.gallery a');
 //functions
 function renderGallery(data) {
   const photoCard = photoCardTpl(data);
-  console.log(photoCard);
   gallery.insertAdjacentHTML('beforeend', photoCard);
   lightbox.refresh();
 }
