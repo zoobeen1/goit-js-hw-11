@@ -1,9 +1,8 @@
 const PIXA_KEY = '27472864-20a91975f294fe19c608dc0e7';
 const BASE_URL = 'https://pixabay.com/api/';
 
-import Axios from 'axios';
+import axios from 'axios';
 const params = {
-  key: PIXA_KEY,
   q: '',
   image_type: 'photo',
   orientation: 'horizontal',
@@ -11,14 +10,14 @@ const params = {
   per_page: 40,
   page: 1,
 };
-const instance = Axios.create({
+const instance = axios.create({
   baseURL: BASE_URL,
 });
 //functions
 //read
 async function getPhotos() {
   try {
-    const resp = await instance.get('', { params });
+    const resp = await instance.get('', { params: { key: PIXA_KEY, ...params } });
     return await resp.data;
   } catch (err) {
     console.log(err);
