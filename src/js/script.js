@@ -12,22 +12,15 @@ const form = document.querySelector('form');
 const searchInput = form.elements.searchQuery;
 const gallery = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
+const PER_PAGE = 40;
 let page = 1;
 let hitCounter = 0;
-let lightbox = new SimpleLightbox('.la', {
-  //options
-  caption: true,
-  captionSelector: 'img',
-  captionsData: 'alt',
-  captionDelay: 250,
-});
+
 //functions
 function renderGallery(data) {
-  data.map(item => {
-    hitCounter += 1;
-    const photoCard = photoCardTpl(item);
-    gallery.insertAdjacentHTML('beforeend', photoCard);
-  });
+  const photoCard = photoCardTpl(data);
+  console.log(photoCard);
+  gallery.insertAdjacentHTML('beforeend', photoCard);
 }
 function clearGallery() {
   gallery.innerHTML = '';
@@ -38,7 +31,7 @@ function onSubmit(e) {
   page = 1;
   hitCounter = 0;
   loadMoreBtn.classList.add('invisible');
-  const data = API.getPhotos(searchInput.value, page);
+  const data = API.getPhotos(searchInput.value, page, PER_PAGE);
   data
     .then(resp => {
       if (resp.length < 1) {
@@ -46,24 +39,24 @@ function onSubmit(e) {
         Notify.info('Sorry, there are no images matching your search query. Please try again.');
         return;
       }
-      if (hitCounter < 1) {
-        Notify.success(`Hooray! We found ${resp.totalHits} images.`);
-      }
+      Notify.success(`Hooray! We found ${resp.totalHits} images.`);
+      hitCounter = PER_PAGE;
       renderGallery(resp.hits);
       loadMoreBtn.classList.remove('invisible');
     })
     .catch(onError);
 }
 function onLoadMore() {
-  page++;
-  const data = API.getPhotos(searchInput.value, page);
+  const data = API.getPhotos(searchInput.value, page + 1, PER_PAGE);
   data
     .then(resp => {
-      if (resp.totalHits <= hitCounter) {
+      if (resp.totalHits < hitCounter) {
         loadMoreBtn.classList.add('invisible');
         Notify.info("We're sorry, but you've reached the end of search results.");
         return;
       }
+      page++;
+      hitCounter += PER_PAGE;
       renderGallery(resp.hits);
     })
     .catch(onError);
@@ -78,3 +71,10 @@ function onError() {
 // yellow+flowers&image_type=photo
 form.addEventListener('submit', onSubmit);
 loadMoreBtn.addEventListener('click', onLoadMore);
+let lightbox = new SimpleLightbox('.gallery a', {
+  //options
+  caption: true,
+  captionSelector: 'img',
+  captionsData: 'alt',
+  captionDelay: 250,
+});
