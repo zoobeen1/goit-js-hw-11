@@ -4,8 +4,8 @@ import '../css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import API from './axis-crud';
 import photoCardTpl from '../templates/photo-card.hbs';
-// import SimpleLightbox from 'simplelightbox';
-import SimpleLightbox from 'simple-lightbox';
+import SimpleLightbox from 'simplelightbox';
+// import SimpleLightbox from 'simple-lightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 //vars
 const form = document.querySelector('form');
@@ -15,12 +15,14 @@ const loadMoreBtn = document.querySelector('.load-more');
 const PER_PAGE = 40;
 let page = 1;
 let hitCounter = 0;
+let lightbox = new SimpleLightbox('.gallery a');
 
 //functions
 function renderGallery(data) {
   const photoCard = photoCardTpl(data);
   console.log(photoCard);
   gallery.insertAdjacentHTML('beforeend', photoCard);
+  lightbox.refresh();
 }
 function clearGallery() {
   gallery.innerHTML = '';
@@ -57,6 +59,7 @@ function onLoadMore() {
       }
       page++;
       hitCounter += PER_PAGE;
+      lightbox.refresh();
       renderGallery(resp.hits);
     })
     .catch(onError);
@@ -64,17 +67,6 @@ function onLoadMore() {
 function onError() {
   Notify.failure('Oops, something went wrong. Please try again.');
 }
-//Example
-// Retrieving photos of "yellow flowers". The search term q needs to be
-// URL encoded:
-// https://pixabay.com/api/?key=27472864-20a91975f294fe19c608dc0e7&q=
-// yellow+flowers&image_type=photo
+
 form.addEventListener('submit', onSubmit);
 loadMoreBtn.addEventListener('click', onLoadMore);
-let lightbox = new SimpleLightbox('.gallery a', {
-  //options
-  caption: true,
-  captionSelector: 'img',
-  captionsData: 'alt',
-  captionDelay: 250,
-});
