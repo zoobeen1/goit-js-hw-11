@@ -7,6 +7,7 @@ import refs from './refs';
 import photoCardTpl from '../templates/photo-card.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+var debounce = require('lodash.debounce');
 //vars
 let hitCounter = 0;
 const lightbox = new SimpleLightbox('.gallery a');
@@ -71,7 +72,7 @@ function everScroll() {
   console.log('ClientHeight ', document.documentElement.clientHeight);
   console.log('InnerHeight ', window.innerHeight);
   console.log('ScrollBottom ', document.documentElement.getBoundingClientRect().bottom);
-  if (document.documentElement.getBoundingClientRect().bottom == window.innerHeight) {
+  if (document.documentElement.getBoundingClientRect().bottom < window.innerHeight + 20) {
     // if (
     //   document.documentElement.getBoundingClientRect().bottom ===
     //   document.documentElement.clientHeight + 100
@@ -83,4 +84,4 @@ function everScroll() {
 
 refs.form.addEventListener('submit', onSubmit);
 // refs.loadMoreBtn.addEventListener('click', onLoadMore);
-window.addEventListener('scroll', everScroll);
+window.addEventListener('scroll', debounce(everScroll, 500));
