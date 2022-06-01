@@ -76,4 +76,4 @@ function everScroll() {
 
 refs.form.addEventListener('submit', onSubmit);
 // refs.loadMoreBtn.addEventListener('click', onLoadMore);
-window.addEventListener('scroll', debounce(everScroll, 500));
+window.addEventListener('scroll', debounce(everScroll, 200));
