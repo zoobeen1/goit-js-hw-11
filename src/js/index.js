@@ -69,15 +69,7 @@ function onError() {
   Notify.failure('Oops, something went wrong. Please try again.');
 }
 function everScroll() {
-  console.log('ClientHeight ', document.documentElement.clientHeight);
-  console.log('InnerHeight ', window.innerHeight);
-  console.log('ScrollBottom ', document.documentElement.getBoundingClientRect().bottom);
   if (document.documentElement.getBoundingClientRect().bottom < window.innerHeight + 20) {
-    // if (
-    //   document.documentElement.getBoundingClientRect().bottom ===
-    //   document.documentElement.clientHeight + 100
-    // ) {
-    console.log('yes');
     onLoadMore();
   }
 }
