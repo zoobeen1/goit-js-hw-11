@@ -3,7 +3,7 @@ const BASE_URL = 'https://pixabay.com/api/';
 
 import axios from 'axios';
 const params = {
-  q: '',
+  q: '', //Qery (строка запроса поиска)
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
